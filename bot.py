@@ -1,20 +1,26 @@
 import discord
 import os
+import sys
+
+print("1. Script startet")
+TOKEN = os.getenv("TOKEN")
+print("2. Token da:", bool(TOKEN))
+
+if not TOKEN:
+    print("FEHLER: TOKEN fehlt komplett")
+    sys.exit(1)
 
 intents = discord.Intents.default()
 intents.message_content = True
-client = discord.Client(intents=intents)
+bot = discord.Client(intents=intents)
 
-@client.event
+@bot.event
 async def on_ready():
-    print('Phoenix online')
+    print(f"PHOENIX ONLINE ALS {bot.user}")
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    if message.content == '!phönix':
-        await message.channel.send('Ritter Georg, Galaxia lebt!')
-
-client.run(os.getenv("TOKEN"))
-
+print("3. Vor bot.run")
+try:
+    bot.run(TOKEN)
+except Exception as e:
+    print("FEHLER BEIM LOGIN:", e)
+    sys.exit(1)
