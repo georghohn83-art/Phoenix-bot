@@ -1,18 +1,21 @@
-import os,threading,discord
-from http.server import BaseHTTPRequestHandler, HTTPServer
+import discord
+from discord.ext import commands
+import os
 
-class H(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(b'Bot is running')
+intents = discord.Intents.default()
+intents.message_content = True
+intents.members = True
+intents.presences = True
 
-threading.Thread(target=lambda:HTTPServer(('0.0.0.0',int(os.getenv('PORT',10000))),H).serve_forever(),daemon=True).start()
+client = commands.Bot(command_prefix="!", intents=intents)
 
-bot=discord.Client(intents=discord.Intents.all())
-
-@bot.event
+@client.event
 async def on_ready():
-    print("Bot laeuft")
+    print(f'Bot ist online als {client.user}')
+    print('------')
 
-bot.run(os.getenv('DISCORD_TOKEN'))
+@client.command()
+async def ping(ctx):
+    await ctx.send("Pong! Ich lebe.")
+
+client.run(os.getenv("DISCORD_TOKEN"))
