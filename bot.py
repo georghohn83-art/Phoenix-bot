@@ -11,6 +11,14 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     print(f'Bot ist online als {client.user}')
-    print(f'Shard ID 0 hat sich mit dem Gateway verbunden')
+    print('------')
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    
+    if message.content == '!ping':
+        await message.channel.send('Pong! PhönixBot lebt.')
 
 client.run(os.getenv("DISCORD_BOT_TOKEN"))
